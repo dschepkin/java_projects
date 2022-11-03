@@ -1,0 +1,118 @@
+- Repository используется для базовых CRUD операций
+  зачем делать для них DAO, если базовые операции реализуются в 3 строки ?
+- DAO всегда существует в сложных проектах, и там реализуем функционал с использованием JDBC template или JDBC
+  Здесь реализуется сложный функционал 
+
+Слои: Контроллер <-> сервис <-> DAO / Repository
+
+1 Контроллер
+	@Controller
+	Минимум кода
+	Только вызов методов из сервисного слоя
+2 Сервисный слой (слой бизнес логики)
+	@Service
+	Работа с данными, полученными из БД 
+	Здесь описываем бизнес логику, а в контроллере только вызываем
+	В один сервисный слой может быть внедрено много DAO / Repository
+...........................................................................
+...Spring Data Jpa ........................................................
+...........................................................................
+mvnrepository.com 
+	Spring Core (обновить до последней версии) + Maven->Clean
+	Spring Context
+	Spring web mvc
+	Spring jdbc
+	PostgreSQL JDBC Driver
+	Hibernate ORM Hibernate Core
+	#именно эту, иначе, почему-то, когда используешь аннотацию @Entity
+	#, она берется не из javax.persistence.Entity, и варианта нет
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.6.9.Final</version>
+        </dependency>
+
+	Spring Data Jpa (последняя версия)
+...........................................................................
+Сначала поработам просто с hibername без dataJpa
+
+resources/hibernate.properties
+#Конфигурация источника данных (Data source)
+hibernate.driver_class=org.postgresql.Driver;
+hibernate.connection.url=jdbc:postgresql://localhost:5432/library
+hibernate.connection.username=postgres
+hibernate.connection.password=postgres
+
+#Конфигурация самого hibernate
+hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+hibernate.show_sql=true
+hibernate.format_sql=true
+hibernate.current_session_context_class=thread
+
+Create directory "Model" for Entities
+Create Entity. 
+Entity обязательно должно:
+	иметь аннотацию @Entity
+	должна быть аннотация @id на первичном ключе
+	должен быть конструктор без параметров
+	конструктор со всеми параметрами
+	должны быть getter and setter for all fields
+
+Можно получить id от sequence при создании пользователя:
+User user = new User("Dima");
+session.save(user);
+session.getTransaction().commit();
+System.out.println(user.getId);
+
+Мы сделали сущности:
+	User
+	Book
+	UserBook
+	Role
+	Role_priv (НЕВЕРНОЕ название, должно быть RolePriv)
+	Privilage
+	Limit
+Связали их отношениями, в частности, из User можем вытащить вообще всю информацию:
+	аттрибуты пользователя
+	роли
+	привилегии
+	выданные книги
+
+Сделали тестовые классы: BookTest, RoleTest, UserTest (поигрался, все работает)
+Правда запутался со связями, когда строил зависимость User->Role->Privs
+Хотел получать из User в том числе все его привилегии (работает через Lazy)
+Тесты в этих тестовых классах отмечаны тегом "//Before Spring configuration"
+Ниже буду тесты для конфигурации Hibernate под управлением Spring	
+...........................................................................
+...Свяжем наше Spring приложение с Hibernate
+...На этом шаге мы пока не будем работать с Spring Data Jpa, а переведем Hibernate под управление Spring
+
+Подключим зависимости:
+...hibernate-core
+	<dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.6.9.Final</version>
+        </dependency>
+
+...spring-orm
+
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-orm</artifactId>
+    <version>5.3.23</version>
+</dependency>
+
+...Criteria API
+Пытался поработать с criteria через метамодель, но не смог сгенерировать ее
+Проект вообще переставал работать после установки зависимости
+информация по настройки по ссылкам:
+https://javastudy.ru/spring-data-jpa/generate-metamodel/
+https://javastudy.ru/spring-data-jpa/jpa-criteria/
+https://docs.jboss.org/hibernate/orm/5.3/topical/html_single/metamodelgen/MetamodelGenerator.html
+...........................................................................
+...........................................................................
+
+
+
+	

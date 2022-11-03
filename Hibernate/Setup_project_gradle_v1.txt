@@ -1,0 +1,52 @@
+1 Postgresql install
+https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
+
+username/password: postgres/postgres
+port: 5432
+
+2 In Idea 
+	- new project: Gradle
+	- Additional Libraries and Frameworks: Java
+	 "hibernateStudy"
+3 Connect to pgsql from idea
+	- Database - data source - postgresql
+	- Download missing driver files
+
+CREATE DATABASE hibernate;
+Create new connection
+username/password: postgres/postgres
+port: 5432
+database: hibernate
+jdbc:postgresql://localhost:5432/hibernate
+
+Connect DB hibernate
+
+CREATE SCHEMA study;
+
+CREATE SCHEMA study;
+
+create table test
+(
+    id int not null
+);
+
+INSERT INTO test (id) VALUES (1)
+INSERT INTO test (id) VALUES (2)
+INSERT INTO test (id) VALUES (3)
+
+select * from test
+
+...gradle
+
+download https://gradle.org/releases/
+
+Microsoft Windows users
+Create a new directory C:\Gradle with File Explorer.
+
+Open a second File Explorer window and go to the directory where the Gradle distribution was downloaded. 
+Double-click the ZIP archive to expose the content. 
+Drag the content folder gradle-7.4.2 to your newly created C:\Gradle folder.
+
+File -> Setting -> Build, Execution, Deployment -> Build Tools -> Maven -> Gradle
+Use gradle from: choose location of new gradle installation
+Gradle JVM -> pick jdk

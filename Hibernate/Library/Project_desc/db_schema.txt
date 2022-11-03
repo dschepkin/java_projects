@@ -1,0 +1,51 @@
+library
+
+    roles (ADMIN, READER_TECH, READER_MED, READER_ART)
+        id
+        name
+        description
+
+    privileges (разрешения на чтением разных тематик: художественная, техническая, медицина...)
+        id
+        name
+            ALL - все привилегии
+            TECH
+            MED
+            ART
+        description
+
+    role_privs
+        id
+        role_id FK
+        priv_id FK
+
+    users
+        id
+        name
+        surname
+        role_id FK NOT NULL
+        account_status (OPEN, LOCKED)
+        password
+        created
+
+    books
+        id
+        name
+        autor
+        add_date
+        expire_date
+
+    user_books
+        id
+        user_id FK NOT NULL
+        book_id FK NOT NULL
+        take_date
+        put_date
+
+    limits
+        id
+        name
+            max_rent_period = 10
+            max_count_book_rent = 3
+            max_count_book_rent_after_violation = 1
+        value

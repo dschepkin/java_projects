@@ -1,0 +1,116 @@
+0 Настройка Java and Maven
+
+Устанавливаем переменную окружения: JAVA_HOME=C:\Users\db.schepkin\Desktop\Java\distrs\jdk\jdk-17.0.3.1
+скачиваем и устанавливаем maven в директорию: C:\Users\db.schepkin\Desktop\Java\distrs\apache-maven-3.8.6-bin\maven
+Добавляем в переменную PATH: 
+	C:\Users\db.schepkin\Desktop\Java\distrs\jdk\jdk-17.0.3.1\bin
+	C:\Users\db.schepkin\Desktop\Java\distrs\apache-maven-3.8.6-bin\maven\bin
+Открываем новую консоль: 
+	java -version
+
+java version "17.0.3.1" 2022-04-22 LTS
+Java(TM) SE Runtime Environment (build 17.0.3.1+2-LTS-6)
+Java HotSpot(TM) 64-Bit Server VM (build 17.0.3.1+2-LTS-6, mixed mode, sharing)
+
+	mvn -version
+
+Apache Maven 3.8.6 (84538c9988a25aec085021c365c560670ad80f63)
+Maven home: C:\Users\db.schepkin\Desktop\Java\distrs\apache-maven-3.8.6-bin\maven
+Java version: 17.0.3.1, vendor: Oracle Corporation, runtime: C:\Users\db.schepkin\Desktop\Java\distrs\jdk\jdk-17.0.3.1
+
+Создаю проект без поддержки maven
+В настройках проекта в настаройках maven стоит дефолтный maven и версия java тоже дефолтная
+Добавляют управление проектом maven
+Создается pom и структура каталогов
+Затем в настройках maven можно указать последнюю установленную версию и версию java как у проекта
+!!! Если сразу указывать последний maven and last java version, then occurs errors
+
+.....Maven create pom.xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.example</groupId>
+    <artifactId>JavaStudy</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <properties>
+        <maven.compiler.source>16</maven.compiler.source>
+        <maven.compiler.target>16</maven.compiler.target>
+    </properties>
+
+</project>
+
+...далее устанавливаем зависимости
+
+1 hibernate core maven dependency (hibernate core relocation) 5.6.9.Final
+2 postgresql jdbc driver maven (драйвер, чтобы приложение могло подключаться к БД)
+3 lombok maven (далее в настройках idea подключить lombok in plugins)
+
+1 Postgresql install
+https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
+
+username/password: postgres/postgres
+port: 5432
+
+2 In Idea 
+	- new project: Maven
+	?- Additional Libraries and Frameworks: Java
+	? "hibernateStudy"
+3 Connect to pgsql from idea
+	- Database - data source - postgresql
+	- Download missing driver files
+
+CREATE DATABASE hibernate;
+Create new connection
+username/password: postgres/postgres
+port: 5432
+database: hibernate
+jdbc:postgresql://localhost:5432/hibernate
+
+Connect DB hibernate
+
+CREATE SCHEMA study;
+
+CREATE SCHEMA study;
+
+DROP TABLE users
+
+CREATE TABLE users (
+    username VARCHAR(64) PRIMARY KEY ,
+    first_name VARCHAR(64),
+    last_name VARCHAR(64),
+    birth_date DATE,
+    age INT
+)
+
+...Надо создать hibernate.cfg.xml
+В настройках проекта добавляем модуль hibernate,а затем на + и добавляем этот файл в директорию resources
+
+Чтобы класс мог быть сущность необходимо:
+- класс должен быть POJO - Plain Old Java Object
+- класс не должен быть final
+- класс не должын быть immutable, поэтому есть setters
+- все поля должны быть private
+- должны быть все getter and setters
+- должен быть конструктор без параметров и со всеми параметрами
+- toString, equals and hashCode
